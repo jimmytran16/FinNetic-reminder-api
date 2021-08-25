@@ -1,0 +1,26 @@
+{
+  "name": "ReminderJobAPI",
+  "version": "1.0.0",
+  "description": "A background job that sends out payment reminders",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server",
+    "start": "node server"
+  },
+  "keywords": [
+    "nodejs",
+    "template"
+  ],
+  "author": "Jimmy Tran",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "node-cron": "^3.0.0",
+    "nodemon": "^2.0.12",
+    "twilio": "^3.67.0"
+  },
+  "devDependencies": {}
+}
