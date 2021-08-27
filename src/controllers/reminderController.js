@@ -1,6 +1,7 @@
 const TwilioService = require('../services/twilioService')
+const SchedulerService = require('../services/schedulerService')
 
-const reminderController = (req, res, next) => {
+const sendOutReminderController = (req, res, next) => {
     var twilioService = new TwilioService()
     // Will call the twilio service to send out the reminders to the users
     twilioService.sendReminder((result) => {
@@ -11,4 +12,18 @@ const reminderController = (req, res, next) => {
     })
 }
 
-module.exports = reminderController;
+const addAccountToQueueController = (req, res, next) => {
+    console.log(req.body)
+    var schedulerService = new SchedulerService()
+    schedulerService.saveToQueue(req.body.payload, (err, result) => {
+        return res.status(200).json({
+            message: err ? err : result,
+            success: err ? false : true
+        })
+    })
+}
+
+module.exports = {
+    sendOutReminderController,
+    addAccountToQueueController
+}

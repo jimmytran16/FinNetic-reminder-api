@@ -1,7 +1,8 @@
 const express = require('express')
 const router = express.Router()
-const controllers = require('../controllers/index')
+const { reminderController } = require('../controllers/index')
 
-router.post('/sendOutPaymentReminders', controllers.reminderController)
+router.post('/sendOutPaymentReminder', reminderController.sendOutReminderController);
+router.post('/addAccountToQueue', reminderController.addAccountToQueueController);
 
 module.exports = router;
