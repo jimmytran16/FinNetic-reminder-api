@@ -23,7 +23,18 @@ const addAccountToQueueController = (req, res, next) => {
     })
 }
 
+const updateSendReminderOptionController = (req, res, next) => {
+    var schedulerService = new SchedulerService()
+    schedulerService.updateSendReminderOption(req.body.userId, req.body.accountId, req.body.sendReminder, (err, result) => {
+        return res.status(200).json({
+            message: err ? err.toString() : result,
+            success: err ? false : true
+        })
+    })
+}
+
 module.exports = {
     sendOutReminderController,
-    addAccountToQueueController
+    addAccountToQueueController,
+    updateSendReminderOptionController
 }
