@@ -13,7 +13,6 @@ const sendOutReminderController = (req, res, next) => {
 }
 
 const addAccountToQueueController = (req, res, next) => {
-    console.log(req.body)
     var schedulerService = new SchedulerService()
     schedulerService.saveToQueue(req.body.payload, (err, result) => {
         return res.status(200).json({
@@ -33,8 +32,19 @@ const updateSendReminderOptionController = (req, res, next) => {
     })
 }
 
+const getUserAccountsInQueueController = (req, res, next) => {
+    var schedulerService = new SchedulerService()
+    schedulerService.getUserAccountsInQueue(req.params.id, (err, result) => {
+        return res.status(200).json({
+            message: err ? err.toString() : result,
+            success: err ? false : true
+        })
+    })
+}
+
 module.exports = {
     sendOutReminderController,
     addAccountToQueueController,
-    updateSendReminderOptionController
+    updateSendReminderOptionController,
+    getUserAccountsInQueueController
 }

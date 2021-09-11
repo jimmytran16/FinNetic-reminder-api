@@ -22,6 +22,16 @@ module.exports = class SchedulerService {
         }
     }
 
+    async getUserAccountsInQueue(userId, cb) {
+        try {
+            let result = await Queue.find({ userId: mongoose.Types.ObjectId(userId) });
+            return cb(null, result);
+        } catch (err) {
+            console.log(err)
+            return cb(err, null);
+        }
+    }
+
     // function to update the boolean sendReminder, if user wants to change it
     async updateSendReminderOption(userId, accountId, sendReminder, cb) {
         try {

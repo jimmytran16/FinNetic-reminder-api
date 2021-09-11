@@ -16,10 +16,11 @@ db.connect();
 // start the cron job scheduler
 cron.schedule(process.env.CRON_REMINDER_PATTERN, () => {
     // will call the endpoint to check if there are dates within the database that has due dates for tomorrow
+    // (NOT DONE YET)
     console.log('ran every minute')
-    scheduleService.attemptToSendReminder((result) => {
-        console.log(result)
-    })
+    // scheduleService.attemptToSendReminder((result) => {
+    //     console.log(result)
+    // })
 })
 
 app.use('/', routers.homeRouter);
