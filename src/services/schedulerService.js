@@ -24,7 +24,7 @@ module.exports = class SchedulerService {
 
     async getUserAccountsInQueue(userId, cb) {
         try {
-            let result = await Queue.find({ userId: mongoose.Types.ObjectId(userId) });
+            let result = await Queue.find({ userId: mongoose.Types.ObjectId(userId) }).exec();
             return cb(null, result);
         } catch (err) {
             console.log(err)
@@ -47,11 +47,14 @@ module.exports = class SchedulerService {
         }
     }
 
-    attemptToSendReminder(cb) {
+    async attemptToSendReminder(cb) {
         // let queues = Queue.find({})
-        this.twilioService.sendReminder((result) => {
-            return cb(result)
-        })
+        const todaysDay = new Date().getDate();
+        let validQueues = await Queue.find({ sendReminder: true, scheduledToSend: todaysDay}).exec();
+        return cb(validQueues)
+        // this.twilioService.sendReminder((result) => {
+        //     return cb(result)
+        // })
     }
 }
 

@@ -11,6 +11,10 @@ const scheduleService = new SchedulerService()
 app.use(express.json())
 app.use(express.urlencoded())
 app.use(require('morgan')('dev'))
+app.use((req,res,next) => {
+    console.log('REQBODY-',req.body);
+    next();
+})
 db.connect();
 
 // start the cron job scheduler
@@ -26,4 +30,4 @@ cron.schedule(process.env.CRON_REMINDER_PATTERN, () => {
 app.use('/', routers.homeRouter);
 app.use('/api/scheduler', routers.reminderRouter);
 
-app.listen(4001, () => console.log(`Connection to PORT ${ 4001 }`));
+module.exports = app;
