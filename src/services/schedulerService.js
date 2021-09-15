@@ -35,8 +35,8 @@ module.exports = class SchedulerService {
     // function to update the boolean sendReminder, if user wants to change it
     async updateSendReminderOption(userId, accountId, sendReminder, cb) {
         try {
-            let result = await Queue.findOneAndUpdate({ userId: mongoose.Types.ObjectId(userId), accountId: mongoose.Types.ObjectId(accountId) }, 
-                                         { $set: { sendReminder: sendReminder } });
+            let result = await Queue.findOneAndUpdate({ userId: mongoose.Types.ObjectId(userId), accountId: mongoose.Types.ObjectId(accountId) },
+                { $set: { sendReminder: sendReminder } });
             if (result === null) {
                 return cb('Result is null therefore update is not proper', null);
             }
@@ -50,11 +50,39 @@ module.exports = class SchedulerService {
     async attemptToSendReminder(cb) {
         // let queues = Queue.find({})
         const todaysDay = new Date().getDate();
-        let validQueues = await Queue.find({ sendReminder: true, scheduledToSend: todaysDay}).exec();
-        return cb(validQueues)
-        // this.twilioService.sendReminder((result) => {
-        //     return cb(result)
-        // })
+        let validQueues = await Queue.find({ sendReminder: true, scheduledToSend: todaysDay }).exec();
+        let batch = validQueues = this._parseValidQueuesIntoBatch(validQueues)
+        this.twilioService.sendReminder(batch, (result) => {
+            return cb(result)
+        })
+    }
+
+    // parse the validQueues into a batch and pass it to the twilio service
+    _parseValidQueuesIntoBatch(validQueues) {
+        let batch = new Array();
+        for (var i in validQueues) {
+            let obj = {
+                body: `Hello this is a reminder that your ${validQueues[i].accountName}'s' is due today on the ${this._ordinalSuffixOf(validQueues[i].scheduledToSend)}`,
+                phone: validQueues[i].phone
+            }
+            batch.push(obj);
+        }
+        return batch;
+    }
+
+    _ordinalSuffixOf(i) {
+        var j = i % 10,
+            k = i % 100;
+        if (j == 1 && k != 11) {
+            return i + "st";
+        }
+        if (j == 2 && k != 12) {
+            return i + "nd";
+        }
+        if (j == 3 && k != 13) {
+            return i + "rd";
+        }
+        return i + "th";
     }
 }
 

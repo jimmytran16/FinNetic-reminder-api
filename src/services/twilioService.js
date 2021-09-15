@@ -21,7 +21,7 @@ module.exports = class TwilioService {
         // send out message -- TESTED
         // need to send payload of numbers that needs to be sent out for reminder
         // take in the batch and then iterate in order to send out messages
-
+        console.log('batches', batch)
         for (var i in batch) {
             client.messages
                 .create({
