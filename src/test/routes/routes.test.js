@@ -1,10 +1,11 @@
 const client = require('supertest')
 const app = require('../../../server')
 const mongoose = require('mongoose')
+const db = require('../../database/db')
 // READ - https://medium.com/@tehvicke/integration-and-unit-testing-with-jest-in-nodejs-and-mongoose-bd41c61c9fbc
 // execution before the test suites
 beforeAll(async () => {
-    await mongoose.connect('mongodb+srv://trackeruser:l74Nsz7hmql4brOK@cluster0.jlrtu.mongodb.net/Reminder_Job?retryWrites=true&w=majority', { useNewUrlParser: true });
+    db.connect()
 });
 
 // execution after the test suites
