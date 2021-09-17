@@ -7,7 +7,7 @@ const queueSchema = new mongoose.Schema({
     username: { type: String, required: false },
     sendReminder: { type: Boolean, required: true },
     scheduledToSend: { type: Number, required: true },
-    phone: { type: String, required: true },
+    phone: { type: String, required: false },
     createdOn: { type: Date, default: new Date() }
 });
 

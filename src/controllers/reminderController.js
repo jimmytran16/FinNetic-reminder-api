@@ -46,9 +46,31 @@ const getUserAccountsInQueueController = (req, res, next) => {
     })
 }
 
+const deleteAccountInQueueController = (req, res, next) => {
+    var schedulerService = new SchedulerService()
+    schedulerService.deleteAccountFromQueue(req.body.accountId, (err, result) => {
+        return res.status(200).json({
+            message: err ? err.toString() : result,
+            success: err ? false : true
+        })
+    })
+}
+
+const updateUserPhoneNumberController = (req, res, next) => {
+    var schedulerService = new SchedulerService()
+    schedulerService.updateUserPhoneNumber(req.body.userId, req.body.phone, (err, result) => {
+        return res.status(200).json({
+            message: err ? err.toString() : result,
+            success: err ? false : true
+        })
+    })
+}
+
 module.exports = {
     sendOutReminderController,
     addAccountToQueueController,
     updateSendReminderOptionController,
-    getUserAccountsInQueueController
+    getUserAccountsInQueueController,
+    deleteAccountInQueueController,
+    updateUserPhoneNumberController
 }

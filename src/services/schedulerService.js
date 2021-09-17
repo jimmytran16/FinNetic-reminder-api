@@ -47,10 +47,33 @@ module.exports = class SchedulerService {
         }
     }
 
+    // Delete the acccount from the Queue by the account id
+    async deleteAccountFromQueue(accountId, cb) {
+        try {
+            let result = await Queue.findOneAndDelete({ accountId: mongoose.Types.ObjectId(accountId) });
+            if (result) {
+                return cb(null, result);
+            }
+            return cb('No Account found', null);
+
+        } catch (err) {
+            return cb(err.toString(), null);
+        }
+    }
+
+    async updateUserPhoneNumber(userId, phone, cb) {
+        try {
+            let result = await Queue.updateMany({ userId: mongoose.Types.ObjectId(userId) }, { $set: { phone: phone } });
+            return cb(null, result);
+        } catch (err) {
+            return cb(err.toString(), null);
+        }
+    }
+
     async attemptToSendReminder(cb) {
         // let queues = Queue.find({})
         const todaysDay = new Date().getDate();
-        let validQueues = await Queue.find({ sendReminder: true, scheduledToSend: todaysDay }).exec();
+        let validQueues = await Queue.find({ sendReminder: true, scheduledToSend: todaysDay, phone: { $ne: null } }).exec();
         let batch = validQueues = this._parseValidQueuesIntoBatch(validQueues)
         this.twilioService.sendReminder(batch, (result) => {
             return cb(result)
