@@ -72,8 +72,8 @@ module.exports = class SchedulerService {
 
     async attemptToSendReminder(cb) {
         // let queues = Queue.find({})
-        const todaysDay = new Date().getDate();
-        let validQueues = await Queue.find({ sendReminder: true, scheduledToSend: todaysDay, phone: { $ne: null } }).exec();
+        const todaysDate = new Date().getDate();
+        let validQueues = await Queue.find({ sendReminder: true, scheduledToSend: todaysDate, phone: { $ne: null } }).exec();
         let batch = validQueues = this._parseValidQueuesIntoBatch(validQueues)
         this.twilioService.sendReminder(batch, (result) => {
             return cb(result)
@@ -85,7 +85,7 @@ module.exports = class SchedulerService {
         let batch = new Array();
         for (var i in validQueues) {
             let obj = {
-                body: `Hello this is a reminder that your ${validQueues[i].accountName}'s' is due today on the ${this._ordinalSuffixOf(validQueues[i].scheduledToSend)}`,
+                body: `Hello this is a reminder that your ${validQueues[i].accountName} account payment is due today on the ${this._ordinalSuffixOf(validQueues[i].scheduledToSend)}. Please don't forget to pay!`,
                 phone: validQueues[i].phone
             }
             batch.push(obj);
