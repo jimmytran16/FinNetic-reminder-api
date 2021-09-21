@@ -85,7 +85,7 @@ module.exports = class SchedulerService {
         let batch = new Array();
         for (var i in validQueues) {
             let obj = {
-                body: `Hello this is a reminder that your ${validQueues[i].accountName} account payment is due today on the ${this._ordinalSuffixOf(validQueues[i].scheduledToSend)}. Please don't forget to pay!`,
+                body: `Hello this is a reminder that your ${validQueues[i].accountName} account payment is due today on the ${this._ordinalSuffixOf(validQueues[i].scheduledToSend)}. Don’t forget to make a payment!`,
                 phone: validQueues[i].phone
             }
             batch.push(obj);
